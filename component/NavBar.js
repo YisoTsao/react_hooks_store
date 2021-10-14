@@ -11,16 +11,17 @@ const NavBar = () => {
     lastName: "tsao",
     age: 30,
   };
-  
+
   const changeUsers = () => changeUser(params, userDispatch);
 
-  const store = userContext();
-  const state = store?.state;
-  
+  const { userImgDispatch, state } = userContext();
 
   function changeImgurl() {
-    store.userSet.Imgurl({
-      imgUrl: "http://balabla.img",
+    userImgDispatch({
+      type: "SETIMG",
+      data: {
+        imgUrl: "http://baladdffbla.img",
+      },
     });
   }
 

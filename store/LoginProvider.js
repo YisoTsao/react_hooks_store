@@ -1,26 +1,26 @@
-import React, { useState, createContext, useReducer, useContext } from "react";
+import React, { useEffect, createContext, useReducer, useContext } from "react";
 import { ImgReducer } from "../store/reducer";
 import { initUserImg } from "../store/initData/index";
-import { setImgUrl } from "../store/action";
 
 export const UserContext = createContext();
 
 export const UserContextProvider = (props) => {
   const theme = { color: "lightBlue" };
-  const [userImg, userImgDispatch] = useReducer(ImgReducer, initUserImg);
+  const [userImg, userImgDispatch] = useReducer(ImgReducer, initUserImg, () => {
+    const localData = localStorage.getItem("imgUrl");
+    return localData ? JSON.parse(localData) : [];
+  });
 
-  const Imgurl = (data) => setImgUrl(data, userImgDispatch);
-
-  const userSet = {
-    Imgurl,
-  };
+  useEffect(() => {
+    localStorage.setItem("imgUrl", JSON.stringify(userImg));
+  }, [userImg]);
 
   const state = {
     userImg,
     theme,
   };
   return (
-    <UserContext.Provider value={{ state, userSet }}>
+    <UserContext.Provider value={{ state, userImgDispatch }}>
       {props.children}
     </UserContext.Provider>
   );
